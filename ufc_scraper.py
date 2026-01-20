@@ -33,6 +33,26 @@ def get_fighter_url(fighter_name):
 
     return None
 
+def clean_reach(reach_str):
+    """
+    Превращает "84.5\"" -> 84.5 (float)
+    Если данных нет ("--"), возвращает 0
+    """
+    if reach_str == "--" or reach_str == "N/A":
+        return 0.0
+    # Убираем кавычку дюйма и пробелы
+    clean = reach_str.replace('"', '').strip()
+    return float(clean)
+
+def clean_percentage(pct_str):
+    """
+    Превращает "58%" -> 0.58 (float)
+    """
+    if pct_str == "--" or pct_str == "N/A":
+        return 0.0
+    # Убираем знак %
+    clean = pct_str.replace('%', '').strip()
+    return float(clean) / 100
 
 def get_fighter_data(fighter_url):
     response = requests.get(fighter_url, headers=HEADERS)
@@ -52,11 +72,19 @@ def get_fighter_data(fighter_url):
             key, value = text.split(':', 1)
             metrics[key.strip()] = value.strip()
 
+# Извлекаем сырые значения
+    raw_reach = metrics.get('Reach', '--')
+    raw_slpm = metrics.get('SLpM', '0')
+    raw_acc = metrics.get('Str. Acc.', '0%')
+    raw_td = metrics.get('TD Avg.', '0')
+    raw_td_def = metrics.get('TD Def.', '0%')
+
+    # Возвращаем очищенные данные (числа!)
     return {
-        'Name': name,
-        'Reach': metrics.get('Reach', 'N/A'),
-        'SLpM': metrics.get('SLpM', '0'),
-        'Str_Acc': metrics.get('Str. Acc.', '0%'),
-        'TD_Avg': metrics.get('TD Avg.', '0'),
-        'TD_Def': metrics.get('TD Def.', '0%')
-    }
+            'Name': name,
+            'Reach': clean_reach(raw_reach),  # Теперь это float
+            'SLpM': float(raw_slpm),  # Просто конвертируем в float
+            'Str_Acc': clean_percentage(raw_acc),  # Теперь это 0.XX
+            'TD_Avg': float(raw_td),
+            'TD_Def': clean_percentage(raw_td_def)
+        }
