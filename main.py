@@ -1,27 +1,27 @@
-# Импортируем наши функции из соседнего файла
+
 from ufc_scraper import get_fighter_url, get_fighter_data
 import pandas as pd
 
 
-# Тест работы программы
+# Testing work
 def test_system():
-    # 1. Спрашиваем имя (симуляция ввода пользователя)
+    #Asking for name
     target_name = "Khabib"
     print(f"🔍 Fighter to look for: {target_name}...")
 
-    # 2. Ищем ссылку
+    #Looking for a link
     url = get_fighter_url(target_name)
 
     if url:
         print(f"✅ Link found: {url}")
 
-        # 3. Достаем статистику
+        #Getting statistics
         data = get_fighter_data(url)
 
-        # 4. Показываем результат
+        #Printing result
         df = pd.DataFrame([data])
         print("\n📊 fighter Statistics:")
-        print(df.to_string(index=False))  # to_string убирает лишние индексы при печати
+        print(df.to_string(index=False))  # to_string removes excess indexes
     else:
         print("❌ Fighter not found.")
 

@@ -1,8 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 
-# --- МАСКИРОВКА ---
-# Это заставляет сайт думать, что мы заходим с обычного компьютера
+# --- Mask ---
+
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
 }
@@ -12,7 +12,7 @@ def get_fighter_url(fighter_name):
     base_url = "http://ufcstats.com/statistics/fighters/search"
     params = {'query': fighter_name}
 
-    # Передаем headers в запрос
+    # giving headers to request
     response = requests.get(base_url, params=params, headers=HEADERS)
 
     if response.status_code != 200:
@@ -21,16 +21,15 @@ def get_fighter_url(fighter_name):
 
     soup = BeautifulSoup(response.content, 'html.parser')
 
-    # Получаем все строки таблицы
+    # getting all columns of table
     rows = soup.find_all('tr', class_='b-statistics__table-row')
 
-    # В поиске ufcstats первые 2 строки могут быть пустыми или заголовками
-    # Нам нужно найти первую строку, где есть ссылка на бойца
+    # In ufcstats first 2 words can be empty
+    # We need to find when link starts
     for row in rows:
         link = row.find('a', href=True)
         if link:
-            return link['href']  # Возвращаем первую найденную ссылку
-
+            return link['href']  # returning found link
     return None
 
 def clean_reach(reach_str):
@@ -82,9 +81,9 @@ def get_fighter_data(fighter_url):
     # returning clean data (numbers!)
     return {
             'Name': name,
-            'Reach': clean_reach(raw_reach),  # Теперь это float
-            'SLpM': float(raw_slpm),  # Просто конвертируем в float
-            'Str_Acc': clean_percentage(raw_acc),  # Теперь это 0.XX
+            'Reach': clean_reach(raw_reach),  # float
+            'SLpM': float(raw_slpm),  #  converting float
+            'Str_Acc': clean_percentage(raw_acc),  #  0.XX
             'TD_Avg': float(raw_td),
             'TD_Def': clean_percentage(raw_td_def)
         }
