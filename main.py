@@ -7,23 +7,23 @@ import pandas as pd
 def test_system():
     # 1. Спрашиваем имя (симуляция ввода пользователя)
     target_name = "Khabib"
-    print(f"🔍 Ищем бойца: {target_name}...")
+    print(f"🔍 Fighter to look for: {target_name}...")
 
     # 2. Ищем ссылку
     url = get_fighter_url(target_name)
 
     if url:
-        print(f"✅ Найдена ссылка: {url}")
+        print(f"✅ Link found: {url}")
 
         # 3. Достаем статистику
         data = get_fighter_data(url)
 
         # 4. Показываем результат
         df = pd.DataFrame([data])
-        print("\n📊 Статистика бойца:")
+        print("\n📊 fighter Statistics:")
         print(df.to_string(index=False))  # to_string убирает лишние индексы при печати
     else:
-        print("❌ Боец не найден.")
+        print("❌ Fighter not found.")
 
 
 if __name__ == "__main__":
