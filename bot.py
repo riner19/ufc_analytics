@@ -1,5 +1,6 @@
 import telebot
 import os
+import time
 from dotenv import load_dotenv
 from analytics import compare_fighters
 
@@ -15,8 +16,6 @@ if not API_TOKEN:
 
 bot = telebot.TeleBot(API_TOKEN)
 
-
-print("✅ Bot is launched and ready to work...")
 
 
 # --- command /start ---
@@ -58,5 +57,11 @@ def handle_compare(message):
         bot.reply_to(message, f"Произошла ошибка при анализе: {e}")
 
 
-# --- Launching infinite cycle () ---
-bot.infinity_polling()
+if __name__ == "__main__":
+    print("🤖 Bot is launched!...")
+    while True:
+        try:
+            bot.infinity_polling(timeout=20, long_polling_timeout=5)
+        except Exception as e:
+            print(f"❌ Error: {e}")
+            time.sleep(5)
