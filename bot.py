@@ -58,10 +58,5 @@ def handle_compare(message):
 
 
 if __name__ == "__main__":
-    print("🤖 Bot is launched!...")
-    while True:
-        try:
-            bot.infinity_polling(timeout=20, long_polling_timeout=5)
-        except Exception as e:
-            print(f"❌ Error: {e}")
-            time.sleep(5)
+
+    bot.infinity_polling(timeout=60, long_polling_timeout=5)
