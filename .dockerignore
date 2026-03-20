@@ -3,4 +3,6 @@ venv/
 __pycache__/
 *.pyc
 .env
-data/A
+.git
+README.md
+ufc_bot.db

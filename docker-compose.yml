@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  ufc-bot:
+    build: .                          #
+    container_name: my-ufc-bot        # Красивое имя контейнера
+    env_file:
+      - .env                          # getting token
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ufc_db_data:/app/data           # for SQLite
+    restart: unless-stopped           # restrarting bot
+
+volumes:
+  ufc_db_data:                        #
